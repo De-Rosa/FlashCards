@@ -1,0 +1,86 @@
+[
+  {
+    "itemID": 0,
+    "rarity": 0,
+    "name": "Common Pack",
+    "type": "pack",
+    "description": "Contains 3 cards of lower quality."
+  },
+  {
+    "itemID": 1,
+    "rarity": 1,
+    "name": "Rare Pack",
+    "type": "pack",
+    "description": "Contains 3 cards of high quality."
+  },
+  {
+    "itemID": 2,
+    "rarity": 2,
+    "name": "Epic Pack",
+    "type": "pack",
+    "description": "Contains 3 cards of higher quality."
+  },
+  {
+    "itemID": 3,
+    "rarity": 3,
+    "name": "Legendary Pack",
+    "type": "pack",
+    "description": "Contains 3 cards of highest quality."
+  },
+  {
+    "itemID": 4,
+    "rarity": 0,
+    "name": "TEST CARD",
+    "type": "utility",
+    "description": "This is a test card."
+  },
+  {
+    "itemID": 5,
+    "rarity": 1,
+    "name": "TEST CARD",
+    "type": "utility",
+    "description": "This is a test card."
+  },
+  {
+    "itemID": 6,
+    "rarity": 2,
+    "name": "TEST CARD",
+    "type": "utility",
+    "description": "This is a test card."
+  },
+  {
+    "itemID": 7,
+    "rarity": 3,
+    "name": "TEST CARD",
+    "type": "utility",
+    "description": "This is a test card."
+  },
+  {
+    "itemID": 8,
+    "rarity": 4,
+    "name": "TEST CARD",
+    "type": "utility",
+    "description": "This is a test card."
+  },
+  {
+    "itemID": 9,
+    "rarity": 5,
+    "name": "TEST CARD",
+    "type": "utility",
+    "description": "This is a test card."
+  },
+  {
+    "itemID": -1,
+    "rarity": 1,
+    "name": "Extra Pockets",
+    "type": "plugin",
+    "description": "Increases maximum card size by 3."
+  },
+  {
+    "itemID": 10,
+    "rarity": 0,
+    "name": "TEST ATTACK CARD",
+    "type": "attack",
+    "description": "This is a test attack card."
+  }
+]

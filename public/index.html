@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" name="viewport" content="user-scalable=0">
+    <title>flashcards</title>
+</head>
+<body>
+    <div id="container">
+        <div id="errorBox"></div>
+        <div id="startPage">
+            <div class="box">
+                <div class="minus-box" onclick="defaultDisplay()">-</div>
+                <div class="program-name" id="box-name">Start Program</div>
+                <img class="logo" src="images/title.png" alt="Logo">
+                <div id="options">
+                    <button class="styled-buttons" onclick="showJoin()">Play</button>
+                    <button class="styled-buttons" onclick="document.createServer()">Create Server</button>
+                </div>
+                <div id="joinFormContainer" style="display: none;">
+                    <form id="joinForm">
+                        <label for="playerName"></label><input id="playerName" type="text" placeholder="Player Name" maxlength="20" minlength="1" required>
+                        <label for="lobbyCode"></label><input id="lobbyCode" type="number" placeholder="Lobby Code" maxlength="5" minlength="5" required>
+                        <button id="submit" type="button" onclick="document.joinLobby()">Join Lobby</button>
+                    </form>
+                </div>
+            </div>
+
+            <script>
+                function defaultDisplay() {
+                    document.getElementById("joinFormContainer").style.display = "none";
+                    document.getElementById("options").style.display = "block";
+                    document.getElementById("box-name").textContent = "Start Program"
+                }
+
+                function showJoin() {
+                    document.getElementById("joinFormContainer").style.display = "block";
+                    document.getElementById("options").style.display = "none";
+                    document.getElementById("box-name").textContent = "Lobby Wizard"
+                }
+            </script>
+        </div>
+
+        <div id="hostPage">
+            <div class="box" id="file-explorer" style="display: block">
+                <div class="minus-box" onclick='document.closeWindow(this.parentElement)'>-</div>
+                <div class="program-name">File Explorer</div>
+                <div id="icon-grid">
+                    <div class="icon-grid-item" onclick="document.selectFile(-1)">
+                        <img src="images/random.png" alt="Random">
+                        <p>Random</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box" id="question-box" style="display: none">
+                <div class="minus-box" onclick='document.closeWindow(this.parentElement)'>-</div>
+                <div class="program-name">Question</div>
+            </div>
+
+            <div class="box" id="players-box" style="display: block">
+                <div class="minus-box" onclick='document.closeWindow(this.parentElement)'>-</div>
+                <div class="program-name">Players</div>
+                <div class="table-program">
+                    <span id="no-players">Nobody's here...</span>
+                    <div class="table-container">
+                        <table id="players">
+                        </table>
+                    </div>
+                    <span id="help" status="initial" style="padding-top:5px">Invite players to the lobby using the code.</span>
+                </div>
+            </div>
+
+            <div class="box" id="code-box" style="display: block">
+                <div class="minus-box" onclick='document.closeWindow(this.parentElement)'>-</div>
+                <div class="program-name">Code</div>
+                <div id="code" style="text-align: center"></div>
+            </div>
+
+            <div class="box" id="ms-box" style="display: none">
+                <div class="minus-box" onclick='document.closeWindow(this.parentElement)'>-</div>
+                <div class="program-name">Mark Scheme</div>
+                <button class="styled-buttons" id="ms" style="width: 95%">Open</button>
+            </div>
+
+            <div class="box" id="credits">
+                <div class="minus-box" onclick='document.closeWindow(this.parentElement)'>-</div>
+                <div class="program-name">Credits</div>
+                Created by: Luca De Rosa
+                <br>
+            </div>
+
+            <div class="box" id="file-box" style="width: 400px">
+                <div class="minus-box" onclick='document.closeWindow(this.parentElement)'>-</div>
+                <div class="program-name">File Wizard</div>
+                <div style="opacity: 50%; text-align: center; margin-bottom: 10px">This is designed for MEI OCR Maths/Further Maths past papers: it will most likely not work otherwise!</div>
+                <div id="textFormContainer">
+                    <form id="fileForm">
+                        <label for="fileName"></label><input id="fileName" type="text" placeholder="File Name" minlength="1" maxlength="20" required>
+                        <br>
+                        <span style="font-size: 20px">Question Papers:</span>
+                        <label for="qps"></label><input id="qps" type="file" placeholder="Question Papers" accept="application/pdf" multiple required>
+                        <br>
+                        <span style="font-size: 20px">Mark Schemes:</span>
+                        <label for="mss"></label><input id="mss" type="file" placeholder="Mark Schemes" accept="application/pdf" multiple required>
+                        <br>
+                        <br>
+                        <input type="submit" value="Create File">
+                    </form>
+                </div>
+            </div>
+
+            <div class="box" id="timer">
+                <div class="minus-box" onclick="document.cancelTimer(false)">-</div>
+                <div class="program-name">Progress</div>
+                <div id="progress-container">
+                    <div id="progress-bar"></div>
+                </div>
+                <div id="info-container">
+                    <div id="time-text">Time progressed: 0m 0s</div>
+                    <div id="time-remaining-text">Time remaining: 0m 0s</div>
+                    <button id="cancel-button" value="Cancel" onclick="document.cancelTimer()">Exit</button>
+                </div>
+            </div>
+
+            <div id="programs">
+                <div class="program-grid-item" onclick='document.openWindow(document.getElementById("file-box"))'>
+                    <img src="images/create%20file.png" alt="Create File">
+                    <p>Create File</p>
+                </div>
+                <div class="program-grid-item" onclick='document.openWindow(document.getElementById("credits"))'>
+                    <img src="images/credits.png" alt="Credits">
+                    <p>Credits</p>
+                </div>
+                <div class="program-grid-item" onclick='document.openWindow(document.getElementById("file-explorer"))'>
+                    <img src="images/file%20explorer.png" alt="Credits">
+                    <p>File Explorer</p>
+                </div>
+                <div class="program-grid-item" onclick='document.openWindow(document.getElementById("players-box"));'>
+                    <img src="images/players.png" alt="Credits">
+                    <p>Players</p>
+                </div>
+                <div class="program-grid-item" onclick='document.openWindow(document.getElementById("code-box"));'>
+                    <img src="images/code.png" alt="Credits">
+                    <p>Code</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="userPage">
+            <div id="playing-page">
+                <div id="selection-remover" onclick="document.removeSelections()"></div>
+                <div class="box" id="money-box" style="top: 125px; left: 210px">
+                    <div class="minus-box">-</div>
+                    <div class="program-name">Money</div>
+                    <div id="money">
+                        $0
+                    </div>
+                </div>
+                <div class="box non-draggable" id="plugins-box" style="top: 125px; right: -150px">
+                    <div class="minus-box">-</div>
+                    <div class="program-name">Plugins</div>
+                    <div id="plugins"></div>
+                </div>
+
+                <div class="box" id="description-box" style="top: 250px">
+                    <div class="minus-box" onclick="document.closeWindow(this.parentElement)">-</div>
+                    <div class="program-name">Description</div>
+                    <div id="description"></div>
+                </div>
+                <div class="box" id="shop-box">
+                    <div class="minus-box">-</div>
+                    <div class="program-name">Shop</div>
+                    <div id="shop-inside">
+                        <div id="shop-cards">
+                            <div class="shop-card common" onclick="document.selectShopItem(this, 0)">
+                                <span>common pack</span>
+                            </div>
+                            <div class="shop-card rare" onclick="document.selectShopItem(this, 1)">
+                                <span>rare pack</span>
+                            </div>
+                            <div class="shop-card epic" onclick="document.selectShopItem(this, 2)">
+                                <span>epic pack</span>
+                            </div>
+                            <div class="shop-card legendary" onclick="document.selectShopItem(this, 3)">
+                                <span>legendary pack</span>
+                            </div>
+                        </div>
+                        <div id="shop-prices">
+                            <div class="price">$2</div>
+                            <div class="price">$5</div>
+                            <div class="price">$8</div>
+                            <div class="price">$15</div>
+                        </div>
+                        <div id="shop-divider"></div>
+                        <div id="plugin-shop-grid">
+                            <div class="plugin-shop-grid-item rare" onclick="document.selectShopItem(this, -1)">
+                                <img src="images/random.png" alt="Random">
+                                <p>Deep Pockets</p>
+                                <p>$10</p>
+                            </div>
+                            <div class="plugin-shop-grid-item epic" onclick="document.selectShopItem(this, -2)">
+                                <img src="images/random.png" alt="Random">
+                                <p>PLUGIN 2</p>
+                                <p>$10</p>
+                            </div>
+                            <div class="plugin-shop-grid-item epic" onclick="document.selectShopItem(this, -3)">
+                                <img src="images/random.png" alt="Random">
+                                <p>PLUGIN 3</p>
+                                <p>$10</p>
+                            </div>
+                            <div class="plugin-shop-grid-item legendary" onclick="document.selectShopItem(this, -4)">
+                                <img src="images/random.png" alt="Random">
+                                <p>PLUGIN 4</p>
+                                <p>$10</p>
+                            </div>
+                        </div>
+                        <div id="clippert">
+                            <div id="speech">Welcome to my store!</div>
+                            <img src="images/clippert.png" alt="Clippert.">
+                        </div>
+                        <button id="purchase">Purchase</button>
+                    </div>
+                </div>
+                <div id="cards">
+                    <div id="max-capacity">Max capacity of 6!</div>
+                </div>
+
+                <div class="box" id="attack-box">
+                    <div class="minus-box">-</div>
+                    <div class="program-name">Player Selector</div>
+                    <div class="table-program">
+                        <div class="table-container">
+                            <table id="attacked"></table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="darken"></div>
+            </div>
+            <div id="bulb-page" onclick="document.toggleBulb()">
+                <div id="bulb-line"></div>
+                <img src="images/bulb.png" id="bulb-img" alt="">
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+    <script src="https://mozilla.github.io/pdf.js/build/pdf.mjs" type="module"></script>
+
+    <script src="join.js" type="module"></script>
+    <script src="json.js" type="module"></script>
+    <script src="questions.js" type="module"></script>
+
+    <script src="host.js" type="module"></script>
+    <script src="user.js" type="module"></script>
+
+    <script src="movables.js"></script>
+</body>
+</html>

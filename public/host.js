@@ -404,7 +404,7 @@ function buyPlugin(playerName, item) {
     if (item > -1 || item < -4) return false;
 
     let index = -1 - item;
-    let cost = [10, 10, 10, 10][index];
+    let cost = [2, 10, 12, 25][index];
     if (players[playerName].money < cost) return false;
     addMoneyToPlayer(playerName, -cost);
 
@@ -416,7 +416,7 @@ function installPlugin(playerName, item) {
     players[playerName].items.push(item);
 
     switch (item) {
-        case -1:
+        case -2:
             players[playerName].maxCards += 3;
             playerEvent(playerName, playerName, "pockets");
             break;
@@ -501,15 +501,155 @@ function processUse(playerName, item) {
 
     if (document.getItemDetails(item).type === "attack") {
         requestTarget(playerName, item)
+    } else if (document.getItemDetails(item).type === "utility"){
+        utilityCard(playerName, item)
     }
 
     updatePlayer(playerName);
     return true;
 }
 
-function processAttack(playerName, target, item) {
-    // temp
-    playerEvent(playerName, target, "attacked");
+function utilityCard(playerName, item) {
+    let player = players[playerName];
+    switch (item) {
+        case 4: {
+            addMoneyToPlayer(playerName, 1);
+            break;
+        }
+        case 5: {
+            addMoneyToPlayer(playerName, 3);
+            break;
+        }
+        case 6: {
+            addMoneyToPlayer(playerName, 5);
+            break;
+        }
+        case 7: {
+            addMoneyToPlayer(playerName, player.money < 0 ? -player.money : player.money);
+            break;
+        }
+        case 8: {
+            addMoneyToPlayer(playerName, player.money < 0 ? -(player.money * 3) : (player.money * 3));
+            break;
+        }
+        case 9: {
+            addMoneyToPlayer(playerName, player.money < 0 ? -(player.money * 5) : (player.money * 5));
+            break;
+        }
+    }
+}
+
+function attackCard(playerName, targetName, item) {
+    let player = players[playerName];
+    let target = players[targetName];
+
+    switch (item) {
+        case 10: {
+            let voodoo = handleVoodoo(target, 0);
+            if (voodoo) break;
+            addMoneyToPlayer(targetName, -1);
+            break;
+        }
+        case 11: {
+            let voodoo = handleVoodoo(target, 1);
+            if (voodoo) break;
+            addMoneyToPlayer(targetName, -3);
+            break;
+        }
+        case 12: {
+            let voodoo = handleVoodoo(target, 2);
+            if (voodoo) break;
+            addMoneyToPlayer(targetName, -5);
+            break;
+        }
+        case 13: {
+            let voodoo = handleVoodoo(target, 3);
+            if (voodoo) break;
+            target.money = target.money < 0 ? (target.money * 2) : Math.floor(target.money / 2)
+            updatePlayer(targetName);
+            break;
+        }
+        case 14: {
+            let voodoo = handleVoodoo(target, 4);
+            if (voodoo) break;
+            target.money = target.money < 0 ? target.money : 0;
+            updatePlayer(targetName);
+
+            break;
+        }
+        case 15: {
+            let voodoo = handleVoodoo(target, 5);
+            if (voodoo) break;
+            target.money = target.money < 0 ? target.money : -target.money;
+            updatePlayer(targetName);
+
+            break;
+        }
+        case 16: {
+            let voodoo = handleVoodoo(target, 3);
+            if (voodoo) break;
+            let swapTemp = player.money;
+            player.money = target.money;
+            target.money = swapTemp;
+
+            updatePlayer(targetName);
+            updatePlayer(playerName);
+            break;
+        }
+        case 17: {
+            let voodoo = handleVoodoo(target, 4);
+            if (voodoo) break;
+            player.money = target.money;
+            target.money = 0;
+
+            updatePlayer(targetName);
+            updatePlayer(playerName);
+            break;
+        }
+        case 18: {
+            let voodoo = handleVoodoo(target, 5);
+            if (voodoo) break;
+            addMoneyToPlayer(playerName, target.money)
+            target.money = 0;
+
+            updatePlayer(targetName);
+            updatePlayer(playerName);
+            break;
+        }
+    }
+}
+
+function handleVoodoo(target, rarity) {
+    if (rarity === 0 || rarity === 1) {
+        if (target.items.includes(-1)) {
+            target.items.splice(target.items.indexOf(-1), 1);
+            updatePlayer(target);
+            return true;
+        }
+    } else if (rarity === 2 || rarity === 3) {
+        if (target.items.includes(-5)) {
+            target.items.splice(target.items.indexOf(-5), 1);
+            updatePlayer(target);
+            return true;
+        }
+    } else if (rarity >= 4) {
+        if (target.items.includes(-6)) {
+            target.items.splice(target.items.indexOf(-6), 1);
+            updatePlayer(target);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function processAttack(playerName, targetName, item) {
+    attackCard(playerName, targetName, item)
+    playerEvent(playerName, targetName, "attacked");
+
+    updateMoneyTable(playerName);
+    updateMoneyTable(targetName);
+
 }
 
 function requestTarget(playerName, item) {
@@ -519,6 +659,7 @@ function requestTarget(playerName, item) {
         const { playerName, target } = data;
         if (playerName === playerName && players[target]) {
             processAttack(playerName, target, item);
+            document.socket.off("target");
         }
     })
 
@@ -591,6 +732,7 @@ document.socket.on('use', function(data) {
 
 document.socket.on('bulb-toggle', function(data) {
     const { playerName } = data;
+    if (question === null) return;
     if (players[playerName]) {
         if (players[playerName].answered) return;
         players[playerName].toggled = !players[playerName].toggled;

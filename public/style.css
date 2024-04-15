@@ -453,7 +453,7 @@ td {
     display: grid;
     position: absolute;
     gap: 25px;
-    grid-template-columns: repeat(4, 95px);
+    grid-template-columns: repeat(4, 105px);
     bottom: 150px;
     left: 25px;
 }
@@ -655,6 +655,7 @@ button:hover {
 
 .card-title {
     text-align: center;
+    margin-top: 25px;
     font-style: normal;
     position: relative;
     width: 100%;

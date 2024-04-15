@@ -1,86 +1,157 @@
-[
-  {
-    "itemID": 0,
-    "rarity": 0,
-    "name": "Common Pack",
-    "type": "pack",
-    "description": "Contains 3 cards of lower quality."
-  },
-  {
-    "itemID": 1,
-    "rarity": 1,
-    "name": "Rare Pack",
-    "type": "pack",
-    "description": "Contains 3 cards of high quality."
-  },
-  {
-    "itemID": 2,
-    "rarity": 2,
-    "name": "Epic Pack",
-    "type": "pack",
-    "description": "Contains 3 cards of higher quality."
-  },
-  {
-    "itemID": 3,
-    "rarity": 3,
-    "name": "Legendary Pack",
-    "type": "pack",
-    "description": "Contains 3 cards of highest quality."
-  },
-  {
-    "itemID": 4,
-    "rarity": 0,
-    "name": "TEST CARD",
-    "type": "utility",
-    "description": "This is a test card."
-  },
-  {
-    "itemID": 5,
-    "rarity": 1,
-    "name": "TEST CARD",
-    "type": "utility",
-    "description": "This is a test card."
-  },
-  {
-    "itemID": 6,
-    "rarity": 2,
-    "name": "TEST CARD",
-    "type": "utility",
-    "description": "This is a test card."
-  },
-  {
-    "itemID": 7,
-    "rarity": 3,
-    "name": "TEST CARD",
-    "type": "utility",
-    "description": "This is a test card."
-  },
-  {
-    "itemID": 8,
-    "rarity": 4,
-    "name": "TEST CARD",
-    "type": "utility",
-    "description": "This is a test card."
-  },
-  {
-    "itemID": 9,
-    "rarity": 5,
-    "name": "TEST CARD",
-    "type": "utility",
-    "description": "This is a test card."
-  },
-  {
-    "itemID": -1,
-    "rarity": 1,
-    "name": "Extra Pockets",
-    "type": "plugin",
-    "description": "Increases maximum card size by 3."
-  },
-  {
-    "itemID": 10,
-    "rarity": 0,
-    "name": "TEST ATTACK CARD",
-    "type": "attack",
-    "description": "This is a test attack card."
-  }
-]
+[{
+  "itemID": 18,
+  "rarity": 5,
+  "name": "Money Swap",
+  "type": "attack",
+  "description": "Gives their money value and sets their money to 0."
+}, {
+  "itemID": 17,
+  "rarity": 4,
+  "name": "Money Swap",
+  "type": "attack",
+  "description": "Sets your money to their money value and sets their money to 0."
+}, {
+  "itemID": 16,
+  "rarity": 3,
+  "name": "Money Swap",
+  "type": "attack",
+  "description": "Swaps the money values."
+}, {
+  "itemID": 15,
+  "rarity": 5,
+  "name": "Money Attack",
+  "type": "attack",
+  "description": "Times their money by -1 (nothing if already negative)."
+}, {
+  "itemID": 14,
+  "rarity": 4,
+  "name": "Money Attack",
+  "type": "attack",
+  "description": "Sets their money to 0 (nothing if negative)."
+}, {
+  "itemID": 13,
+  "rarity": 3,
+  "name": "Money Attack",
+  "type": "attack",
+  "description": "Halves their money (or doubles if negative)."
+}, {
+  "itemID": 12,
+  "rarity": 2,
+  "name": "Money Attack",
+  "type": "attack",
+  "description": "Subtracts $5."
+}, {
+  "itemID": 11,
+  "rarity": 1,
+  "name": "Money Attack",
+  "type": "attack",
+  "description": "Subtracts $3."
+}, {
+  "itemID": 10,
+  "rarity": 0,
+  "name": "Money Attack",
+  "type": "attack",
+  "description": "Subtracts $1."
+}, {
+  "itemID": 9,
+  "rarity": 5,
+  "name": "Money Boost",
+  "type": "utility",
+  "description": "Quintuples money."
+}, {
+  "itemID": 8,
+  "rarity": 4,
+  "name": "Money Boost",
+  "type": "utility",
+  "description": "Triples money."
+}, {
+  "itemID": 7,
+  "rarity": 3,
+  "name": "Money Boost",
+  "type": "utility",
+  "description": "Doubles money."
+}, {
+  "itemID": 6,
+  "rarity": 2,
+  "name": "Money Boost",
+  "type": "utility",
+  "description": "Gives $5."
+}, {
+  "itemID": 5,
+  "rarity": 1,
+  "name": "Money Boost",
+  "type": "utility",
+  "description": "Gives $3."
+}, {
+  "itemID": 4,
+  "rarity": 0,
+  "name": "Money Boost",
+  "type": "utility",
+  "description": "Gives $1."
+}, {
+  "itemID": 3,
+  "rarity": 3,
+  "name": "Legendary Pack",
+  "type": "pack",
+  "description": "Contains 3 cards of highest quality."
+}, {
+  "itemID": 2,
+  "rarity": 2,
+  "name": "Epic Pack",
+  "type": "pack",
+  "description": "Contains 3 cards of higher quality."
+}, {
+  "itemID": 1,
+  "rarity": 1,
+  "name": "Rare Pack",
+  "type": "pack",
+  "description": "Contains 3 cards of high quality."
+}, {
+  "itemID": 0,
+  "rarity": 0,
+  "name": "Common Pack",
+  "type": "pack",
+  "description": "Contains 3 cards of lower quality."
+}, {
+  "itemID": -1,
+  "rarity": 1,
+  "name": "Voodoo",
+  "type": "plugin",
+  "image": "voodoo.png",
+  "description": "This is destroyed to negate any common/rare attacks."
+}, {
+  "itemID": -2,
+  "rarity": 1,
+  "name": "Deep Pockets",
+  "image": "wallet.png",
+  "type": "plugin",
+  "description": "Increases maximum card size by 3."
+}, {
+  "itemID": -3,
+  "rarity": 1,
+  "name": "Stocks",
+  "image": "stocks.png",
+  "type": "plugin",
+  "description": "Doubles money gained by answering correctly."
+}, {
+  "itemID": -4,
+  "rarity": 2,
+  "name": "Government Bailout",
+  "image": "bailout.png",
+  "type": "plugin",
+  "description": "Any debt is instantly cancelled when answering correctly."
+}, {
+  "itemID": -5,
+  "rarity": 2,
+  "name": "Voodoo",
+  "image": "voodoo.png",
+  "type": "plugin",
+  "description": "This is destroyed to negate any epic/legendary attacks."
+}, {
+  "itemID": -6,
+  "rarity": 3,
+  "name": "Voodoo",
+  "image": "voodoo.png",
+  "type": "plugin",
+  "description": "This is destroyed to negate any ultra-rare attacks."
+}]

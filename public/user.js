@@ -118,8 +118,8 @@ function displayCard(item) {
     newDiv.appendChild(cardCategory);
     newDiv.appendChild(br);
     newDiv.appendChild(rarity);
-    newDiv.appendChild(description);
     newDiv.appendChild(title);
+    newDiv.appendChild(description);
 
     document.getElementById("cards").appendChild(newDiv);
 }
@@ -130,13 +130,16 @@ function displayPlugin(item) {
 
     newDiv.classList.add("plugin-grid-item");
 
-    // change based on item
-    img.src = "images/random.png"
 
     let details = document.getItemDetails(item);
     newDiv.onclick = function() {
         showDescription(details);
     }
+
+    img.src = `images/${details.image}`
+
+    const rarities = ["common", "rare", "epic", "legendary", "mythic", "godly"]
+    img.classList.add(rarities[details.rarity])
 
     newDiv.appendChild(img);
     document.getElementById("plugins").appendChild(newDiv);
@@ -191,7 +194,6 @@ function target(targetName) {
     selectingAttack = false;
 
     document.getElementById("attacked").innerHTML = "";
-    //document.getElementById("attack-box").style.display = "none";
     document.closeWindow(document.getElementById("attack-box"), true, true)
     document.getElementById("darken").style.display = "none";
 
@@ -211,7 +213,13 @@ function animateDarken() {
 }
 
 function resetCards() {
+    let text = document.getElementById("max-capacity").textContent;
     document.getElementById("cards").innerHTML = "";
+
+    let capacity = document.createElement("div");
+    capacity.id = "max-capacity";
+    capacity.textContent = text;
+    document.getElementById("cards").appendChild(capacity);
 }
 
 function resetPlugins() {
@@ -390,6 +398,9 @@ function processEvent(playerName, event) {
     switch (event) {
         case "pockets":
             document.getElementById("max-capacity").textContent = "Max capacity of 9!";
+            break;
+        case "attacked":
+            document.showError(`You have been attacked by ${playerName}!`)
             break;
         default:
             console.error("Processing unknown event!");

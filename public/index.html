@@ -54,8 +54,10 @@
             </div>
 
             <div class="box" id="question-box" style="display: none">
-                <div class="minus-box" onclick='document.closeWindow(this.parentElement)'>-</div>
+                <div class="minus-box" onclick='document.cancelTimer(false)'>-</div>
                 <div class="program-name">Question</div>
+                <div id="zoom-in" onclick="document.zoomIn()">+</div>
+                <div id="zoom-out" onclick="document.zoomOut()">-</div>
             </div>
 
             <div class="box" id="players-box" style="display: block">
@@ -246,7 +248,7 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
-    <script src="https://mozilla.github.io/pdf.js/build/pdf.mjs" type="module"></script>
+    <script src="pdf.mjs" type="module"></script>
 
     <script src="join.js" type="module"></script>
     <script src="json.js" type="module"></script>

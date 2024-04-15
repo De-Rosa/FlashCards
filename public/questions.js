@@ -1,5 +1,5 @@
 const { pdfjsLib } = globalThis;
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.mjs';
+pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.mjs';
 
 let currentPDF = null;
 let papers = {};

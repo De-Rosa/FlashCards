@@ -74,8 +74,10 @@ body {
     background-color: #ffffff;
     border: 4px double #000000;
     min-width: 375px;
+    min-height: 50px;
     z-index: 5;
     overflow: hidden;
+    resize: vertical;
 }
 
 .small {
@@ -113,6 +115,34 @@ body {
     user-select: none;
     cursor: pointer;
     font-family: monospace;
+}
+
+#zoom-in {
+    position: absolute;
+    bottom: 0;
+    right: 40px;
+    margin: 10px;
+    width: 30px;
+    height: 30px;
+    border: 2px solid black;
+    background-color: white;
+    cursor: pointer;
+    font-size: 30px;
+    text-align: center;
+}
+
+#zoom-out {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 10px;
+    width: 30px;
+    height: 30px;
+    border: 2px solid black;
+    background-color: white;
+    cursor: pointer;
+    font-size: 30px;
+    text-align: center;
 }
 
 .logo {

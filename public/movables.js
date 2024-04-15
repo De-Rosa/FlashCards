@@ -4,7 +4,6 @@ for (let i = 0; i < draggable.length; i++) {
     dragElement(draggable[i]);
 }
 
-// credit: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_draggable
 function dragElement(element) {
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
     if (element.getElementsByClassName("program-name")[0]) {
@@ -29,11 +28,11 @@ function dragElement(element) {
         pos3 = e.clientX;
         pos4 = e.clientY;
 
-        let newLeft = element.offsetLeft - pos1;
-        element.style.left = newLeft + "px";
+        let newLeft = (element.offsetLeft - pos1) / window.innerWidth * 100;
+        element.style.left = newLeft + "%";
 
-        let newTop = element.offsetTop - pos2;
-        element.style.top = newTop + "px";
+        let newTop = (element.offsetTop - pos2) / window.innerHeight * 100;
+        element.style.top = newTop + "%";
     }
 
     function closeDragElement() {

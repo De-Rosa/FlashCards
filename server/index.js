@@ -58,8 +58,6 @@ function joinLobby(lobby, playerName) {
 }
 
 io.on('connection', (socket) => {
-    console.log("User connected.");
-
     socket.on('create-lobby', () => {
         const lobbyCode = generateLobbyCode();
         lobbies[lobbyCode] = {

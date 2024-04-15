@@ -168,6 +168,24 @@ document.closeWindow = function (div, simultaneous = false, user = false) {
     }, 200);
 }
 
+document.zoomIn = function () {
+    if (document.getElementById("question-box").style.scale === "") {
+        document.getElementById("question-box").style.scale = "1";
+    }
+    let scale = parseFloat(document.getElementById("question-box").style.scale);
+    if (scale > 2) return;
+    document.getElementById("question-box").style.scale = (scale + 0.1).toString()
+}
+
+document.zoomOut = function () {
+    if (document.getElementById("question-box").style.scale === "") {
+        document.getElementById("question-box").style.scale = "1";
+    }
+    let scale = parseFloat(document.getElementById("question-box").style.scale);
+    if (scale <= 0.5) return;
+    document.getElementById("question-box").style.scale = (scale - 0.1).toString()
+}
+
 function createOutline(div, user = false) {
     let outline = document.createElement("div");
     if (user) {
@@ -302,8 +320,8 @@ document.selectFile = function (fileName) {
         ms = files[fileName].mss[random];
     }
 
-    console.log(ms);
-    console.log(qp);
+    document.getElementById("question-box").style.height = "";
+    document.getElementById("question-box").style.scale = "";
 
     document.renderPDF(qp);
     showMS(ms);

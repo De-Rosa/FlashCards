@@ -1,15 +1,15 @@
 import items from "../src/items.json" with { type: 'json'};
 
-document.getCard = function (rarity) {
-    let cards = document.getCards(rarity);
+document.getCard = function (rarity = null, type = null) {
+    let cards = document.getCards(rarity, type);
     if (cards.length === 0) return null;
     let random = Math.floor(Math.random() * cards.length);
     return cards[random].itemID;
 }
 
-document.getCards = function (rarity) {
+document.getCards = function (rarity, type) {
     return items.filter(obj => {
-        return obj.rarity === rarity && obj.itemID > 3
+        return (obj.rarity === rarity || rarity === null) && (obj.type === type || type === null) && obj.itemID > 3;
     });
 }
 
@@ -22,14 +22,15 @@ document.getItemDetails = function (itemID) {
     return details[0];
 }
 
-document.getPlugin = function (rarity) {
-    let plugins = document.getPlugins(rarity);
+document.getPlugin = function (rarity, currentPlugins = []) {
+    let plugins = document.getPlugins(rarity, currentPlugins);
+    if (plugins.length === 0) return null;
     let random = Math.floor(Math.random() * plugins.length);
     return plugins[random].itemID;
 }
 
-document.getPlugins = function (rarity) {
+document.getPlugins = function (rarity, currentPlugins = []) {
     return items.filter(obj => {
-        return obj.rarity === rarity && obj.itemID < 0
+        return obj.rarity === rarity && obj.itemID < 0 && !currentPlugins.includes(obj);
     });
 }

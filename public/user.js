@@ -154,7 +154,7 @@ function showDescription(details) {
 
 let selectingAttack = false;
 function showAttackSelection(players) {
-    if (players.length <= 1) return;
+    if (players.length <= 0) return;
     selectingAttack = true;
 
     document.getElementById("attacked").innerHTML = "";

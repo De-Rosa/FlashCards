@@ -244,12 +244,12 @@ io.on('connection', (socket) => {
     })
 
     socket.on('request-target', (data) => {
-        const { code, playerName } = data;
+        const { code, playerName, targets } = data;
         let lobby = lobbies[code];
         try {
             let player = getPlayer(lobby, playerName);
             if (player !== undefined && socket.id === lobby.host) {
-                io.to(player.id).emit('request-target', { players: getPlayerNames(lobby) });
+                io.to(player.id).emit('request-target', { players: targets });
             }
         } catch (e) {
             console.error("Failure in target request: " + e);

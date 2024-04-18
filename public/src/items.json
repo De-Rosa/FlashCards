@@ -17,7 +17,7 @@
   },
   {
     "itemID": -4,
-    "rarity": 2,
+    "rarity": 3,
     "name": "Government Bailout",
     "type": "plugin",
     "description": "Any debt is halved when answering correctly.",
@@ -675,12 +675,5 @@
     "name": "Poison",
     "type": "attack",
     "description": "Give the target a legendary poison card."
-  },
-  {
-    "itemID": 87,
-    "rarity": 5,
-    "name": "Silence",
-    "type": "attack",
-    "description": "The target cannot use targeted cards next turn."
   }
 ]

@@ -332,6 +332,7 @@ function startQuestion() {
     if (question !== null) return;
 
     question = true;
+    topThree = [];
 
     document.closeWindow(document.getElementById("file-explorer"), true)
     document.openWindow(document.getElementById("timer"), true)
@@ -342,10 +343,6 @@ function startQuestion() {
     }
 
     document.socket.emit('start-question', {code: lobbyCode});
-}
-
-function calculateCoins() {
-    return 5;
 }
 
 function addMoneyToPlayer(playerName, amount) {
@@ -359,6 +356,8 @@ function incorrectPlayer(playerName) {
     players[playerName].toggled = false;
     players[playerName].answered = false;
 
+    onIncorrect(playerName);
+
     updateToggleColor(playerName);
     markPlayer(playerName, false);
 }
@@ -371,8 +370,175 @@ function correctPlayer(playerName) {
     updateToggleColor(playerName);
     markPlayer(playerName, true);
 
-    let coins = calculateCoins();
-    addMoneyToPlayer(playerName, coins);
+    onCorrect(playerName)
+}
+
+
+let topThree = [];
+function onCorrect(playerName) {
+    let player = players[playerName];
+    const firstBonuses = [8, 4, 2];
+    let amount = 5;
+    if (topThree.length < 3) {
+        amount += firstBonuses[topThree.length];
+        if (player.betting) {
+            for (let i = 0; i < Object.keys(player.betting); i++) {
+                let bettingPlayer = Object.keys(player.betting)[i];
+                addMoneyToPlayer(bettingPlayer, player.betting[bettingPlayer]);
+            }
+        }
+    }
+
+    // bailout
+    if (player.items.includes(-4)) {
+        if (player.money < 0) {
+            player.money = Math.floor(player.money / 2);
+        }
+    }
+
+    // stocks
+    if (player.items.includes(-3)) {
+        amount *= 2;
+    }
+
+    if (player.onWin) {
+        amount += player.onWin;
+        player.onWin = 0;
+        player.onLose = 0;
+    }
+
+    for (let i = 0; i < player.items; i++) {
+        let item = player.items[i];
+        switch (item) {
+            case 51: {
+                addMoneyToPlayer(playerName, 2)
+                break;
+            }
+            case 52: {
+                addMoneyToPlayer(playerName, 4)
+                break;
+            }
+            case 53: {
+                addMoneyToPlayer(playerName, 6)
+                break;
+            }
+            case 54: {
+                addMoneyToPlayer(playerName, 8)
+                break;
+            }
+            case 55: {
+                addMoneyToPlayer(playerName, 10)
+                break;
+            }
+            case 56: {
+                addMoneyToPlayer(playerName, 15)
+                break;
+            }
+        }
+    }
+
+    addMoneyToPlayer(playerName, amount);
+}
+
+function onIncorrect(playerName) {
+    let player = players[playerName];
+
+    if (player.onLose) {
+        addMoneyToPlayer(playerName, -player.onLose);
+        player.onWin = 0;
+        player.onLose = 0;
+    }
+
+    for (let i = 0; i < player.items; i++) {
+        let item = player.items[i];
+        switch (item) {
+            case 51: {
+                player.items.splice(player.items.indexOf(item), 1);
+                break;
+            }
+            case 52: {
+                player.items.splice(player.items.indexOf(item), 1);
+                break;
+            }
+            case 53: {
+                player.items.splice(player.items.indexOf(item), 1);
+                break;
+            }
+            case 54: {
+                player.items.splice(player.items.indexOf(item), 1);
+                break;
+            }
+            case 55: {
+                player.items.splice(player.items.indexOf(item), 1);
+                break;
+            }
+            case 56: {
+                player.items.splice(player.items.indexOf(item), 1);
+                break;
+            }
+        }
+    }
+}
+
+function onQuestionEnd() {
+    for (let i = 0; i < Object.keys(players); i++) {
+        onQuestionEndPlayer(Object.keys(players)[i])
+    }
+}
+
+function onQuestionEndPlayer(playerName) {
+    let player = players[playerName];
+
+    if (player.onWin) {
+        player.onWin = 0;
+        player.onLose = 0;
+    }
+
+    for (let i = 0; i < player.items; i++) {
+        let item = player.items[i];
+        switch (item) {
+            case 19: {
+                addMoneyToPlayer(playerName, -2);
+                break;
+            }
+            case 20: {
+                addMoneyToPlayer(playerName, -3);
+                break;
+            }
+            case 21: {
+                addMoneyToPlayer(playerName, -4);
+                break;
+            }
+            case 22: {
+                addMoneyToPlayer(playerName, -5);
+                break;
+            }
+            case 45: {
+                addMoneyToPlayer(playerName, 1);
+                break;
+            }
+            case 46: {
+                addMoneyToPlayer(playerName, 2);
+                break;
+            }
+            case 47: {
+                addMoneyToPlayer(playerName, 3);
+                break;
+            }
+            case 48: {
+                addMoneyToPlayer(playerName, 4);
+                break;
+            }
+            case 49: {
+                addMoneyToPlayer(playerName, 5);
+                break;
+            }
+            case 50: {
+                addMoneyToPlayer(playerName, 6);
+                break;
+            }
+        }
+    }
 }
 
 function resetPlayerTemps() {
@@ -523,11 +689,9 @@ function processUse(playerName, item) {
 
 function getTargetablePlayers(playerName) {
     let targetable = [];
-    for (let i = 0; i < Object.keys(players); i++) {
-        let player = Object.keys(players)[i];
-        if (player === playerName) continue;
-        targetable.push(player);
-    }
+    Object.keys(players).forEach(player => {
+        if (player !== playerName) targetable.push(player);
+    })
     return targetable;
 }
 
@@ -600,7 +764,7 @@ function curseCard(playerName, item) {
 
 function getPlugins(player) {
     return player.items.filter(obj => {
-        return obj.itemID < 0;
+        return obj < 0;
     });
 }
 
@@ -708,14 +872,14 @@ function utilityCard(playerName, item) {
         case 59: {
             addMoneyToPlayer(playerName, 10);
             let card = document.getCard(null, "curse");
-            player.cards.push(card);
+            player.items.push(card);
             break;
         }
         case 60: {
             addMoneyToPlayer(playerName, 20);
             for (let i = 0; i < 2; i++) {
                 let card = document.getCard(null, "curse");
-                player.cards.push(card);
+                player.items.push(card);
             }
             break
         }
@@ -723,7 +887,7 @@ function utilityCard(playerName, item) {
             addMoneyToPlayer(playerName, 30);
             for (let i = 0; i < 3; i++) {
                 let card = document.getCard(null, "curse");
-                player.cards.push(card);
+                player.items.push(card);
             }
             break
         }
@@ -731,7 +895,7 @@ function utilityCard(playerName, item) {
             addMoneyToPlayer(playerName, 100);
             for (let i = 0; i < 6; i++) {
                 let card = document.getCard(null, "curse");
-                player.cards.push(card);
+                player.items.push(card);
             }
             break
         }
@@ -784,15 +948,19 @@ function utilityCard(playerName, item) {
 
 function getCards(player, type = null) {
     let cards = player.items.filter(obj => {
-        return (obj.type === type || type === null) && obj.itemID > 3;
+        let details = document.getItemDetails(obj);
+        return (details.type === type || type === null) && obj > 3;
     });
     if (cards.length === 0) return null;
     return cards;
 }
+
 function getRandomCard(player, type = null) {
      let cards = player.items.filter(obj => {
-        return (obj.type === type || type === null) && obj.itemID > 3;
+         let details = document.getItemDetails(obj);
+        return (details.type === type || type === null) && obj > 3;
     });
+    console.log(cards);
     if (cards.length === 0) return null;
     let random = Math.floor(Math.random() * cards.length);
     return cards[random];
@@ -802,80 +970,210 @@ function attackCard(playerName, targetName, item) {
     let player = players[playerName];
     let target = players[targetName];
 
+    let itemRarity = document.getItemDetails(item).rarity;
+    let voodoo = handleVoodoo(target, itemRarity);
+    if (voodoo) return;
+
     switch (item) {
         case 10: {
-            let voodoo = handleVoodoo(target, 0);
-            if (voodoo) break;
             addMoneyToPlayer(targetName, -1);
             break;
         }
         case 11: {
-            let voodoo = handleVoodoo(target, 1);
-            if (voodoo) break;
             addMoneyToPlayer(targetName, -3);
             break;
         }
         case 12: {
-            let voodoo = handleVoodoo(target, 2);
-            if (voodoo) break;
             addMoneyToPlayer(targetName, -5);
             break;
         }
         case 13: {
-            let voodoo = handleVoodoo(target, 3);
-            if (voodoo) break;
             target.money = target.money < 0 ? (target.money * 2) : Math.floor(target.money / 2)
-            updatePlayer(targetName);
             break;
         }
         case 14: {
-            let voodoo = handleVoodoo(target, 4);
-            if (voodoo) break;
             target.money = target.money < 0 ? target.money : 0;
-            updatePlayer(targetName);
 
             break;
         }
         case 15: {
-            let voodoo = handleVoodoo(target, 5);
-            if (voodoo) break;
             target.money = target.money < 0 ? target.money : -target.money;
-            updatePlayer(targetName);
 
             break;
         }
         case 16: {
-            let voodoo = handleVoodoo(target, 3);
-            if (voodoo) break;
             let swapTemp = player.money;
             player.money = target.money;
             target.money = swapTemp;
-
-            updatePlayer(targetName);
-            updatePlayer(playerName);
             break;
         }
         case 17: {
-            let voodoo = handleVoodoo(target, 4);
-            if (voodoo) break;
             player.money = target.money;
             target.money = 0;
-
-            updatePlayer(targetName);
-            updatePlayer(playerName);
             break;
         }
         case 18: {
-            let voodoo = handleVoodoo(target, 5);
-            if (voodoo) break;
             addMoneyToPlayer(playerName, target.money)
             target.money = 0;
+            break;
+        }
+        case 41: {
+            if (!target.betting) {
+                target.betting = {};
+            }
 
-            updatePlayer(targetName);
-            updatePlayer(playerName);
+            addMoneyToPlayer(playerName, -10)
+
+            target.betting[playerName] += 20;
+            break;
+        }
+        case 42: {
+            if (!target.betting) {
+                target.betting = {};
+            }
+
+            addMoneyToPlayer(playerName, -25)
+
+            target.betting[playerName] += 50;
+            break;
+        }
+        case 43: {
+            if (!target.betting) {
+                target.betting = {};
+            }
+
+            addMoneyToPlayer(playerName, -50)
+
+            target.betting[playerName] += 100;
+            break;
+        }
+        case 44: {
+            if (!target.betting) {
+                target.betting = {};
+            }
+
+            addMoneyToPlayer(playerName, -100)
+
+            target.betting[playerName] += 200;
+            break;
+        }
+        case 68: {
+            let card = getRandomCard(target);
+            if (card === null) break;
+            target.items.splice(player.items.indexOf(card), 1);
+            player.items.push(card);
+            break;
+        }
+        case 69: {
+            for (let i = 0; i < 2; i++) {
+                let card = getRandomCard(target);
+                if (card === null) break;
+                target.items.splice(player.items.indexOf(card), 1);
+                player.items.push(card);
+            }
+            break;
+        }
+        case 70: {
+            for (let i = 0; i < 3; i++) {
+                let card = getRandomCard(target);
+                if (card === null) break;
+                target.items.splice(player.items.indexOf(card), 1);
+                player.items.push(card);
+            }
+            break;
+        }
+        case 71: {
+            for (let i = 0; i < 4; i++) {
+                let card = getRandomCard(target);
+                if (card === null) break;
+                target.items.splice(player.items.indexOf(card), 1);
+                player.items.push(card);
+            }
+            break;
+        }
+        case 72: {
+            let cards = getCards(target);
+            if (cards === null) break;
+            for (let i = 0; i < cards.length; i++) {
+                target.items.splice(player.items.indexOf(cards[i]), 1);
+                player.items.push(cards[i]);
+            }
+            break;
+        }
+        case 73: {
+            let curse = document.getCard(0, "curse");
+            target.items.push(curse);
+            break;
+        }
+        case 74: {
+            let curse = document.getCard(1, "curse");
+            target.items.push(curse);
+            break;
+        }
+        case 75: {
+            let curse = document.getCard(2, "curse");
+            target.items.push(curse);
+            break;
+        }
+        case 76: {
+            let curse = document.getCard(3, "curse");
+            target.items.push(curse);
+            break;
+        }
+        case 77: {
+            let curse = document.getCard(4, "curse");
+            target.items.push(curse);
+            break;
+        }
+        case 78: {
+            let curse = document.getCard(5, "curse");
+            target.items.push(curse);
+            break;
+        }
+        case 79: {
+            if (!target.leeches) {
+                target.leeches = {};
+            }
+
+            target.leeches[playerName] = 0;
+            break;
+        }
+        case 80: {
+            if (!target.leeches) {
+                target.leeches = {};
+            }
+
+            target.leeches[playerName] = 1;
+            break;
+        }
+        case 81: {
+            if (!target.leeches) {
+                target.leeches = {};
+            }
+
+            target.leeches[playerName] = 2;
+            break;
+        }
+        case 83: {
+            target.items.push(19);
+            break;
+        }
+        case 84: {
+            target.items.push(20);
+            break;
+        }
+        case 85: {
+            target.items.push(21);
+            break;
+        }
+        case 86: {
+            target.items.push(22);
             break;
         }
     }
+
+    updatePlayer(targetName);
+    updatePlayer(playerName);
 }
 
 function handleVoodoo(target, rarity) {
@@ -912,13 +1210,13 @@ function processAttack(playerName, targetName, item) {
 }
 
 function requestTarget(playerName, item) {
-    document.socket.emit('request-target', {code: lobbyCode, playerName: playerName})
-
     let targets = getTargetablePlayers();
     if (targets.length === 0) {
         players[playerName].items.push(item);
         return;
     }
+
+    document.socket.emit('request-target', {code: lobbyCode, playerName: playerName})
 
     document.socket.on('target', function(data) {
         const { playerName, target } = data;

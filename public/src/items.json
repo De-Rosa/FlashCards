@@ -25,7 +25,7 @@
   },
   {
     "itemID": -3,
-    "rarity": 1,
+    "rarity": 2,
     "name": "Stocks",
     "type": "plugin",
     "description": "Doubles money gained by answering correctly.",
@@ -204,7 +204,7 @@
     "rarity": 0,
     "name": "Poison",
     "type": "status",
-    "description": "Lose $2 after every question while this is in hand. Using this card costs $8.",
+    "description": "Lose $2 after every question while in hand. Using this card costs $8.",
     "image": ""
   },
   {
@@ -212,21 +212,21 @@
     "rarity": 1,
     "name": "Poison",
     "type": "status",
-    "description": "Lose $3 after every question while this is in hand. Using this card costs $12."
+    "description": "Lose $3 after every question while in hand. Using this card costs $12."
   },
   {
     "itemID": 21,
     "rarity": 2,
     "name": "Poison",
     "type": "status",
-    "description": "Lose $4 after every question while this is in hand. Using this card costs $16."
+    "description": "Lose $4 after every question while in hand. Using this card costs $16."
   },
   {
     "itemID": 22,
     "rarity": 3,
     "name": "Poison",
     "type": "status",
-    "description": "Lose $5 after every question while this is in hand. Using this card costs $20."
+    "description": "Lose $5 after every question while in hand. Using this card costs $20."
   },
   {
     "itemID": 23,
@@ -387,84 +387,84 @@
     "rarity": 0,
     "name": "Golden Card",
     "type": "utility",
-    "description": "Gain $1 after every question while this is in hand."
+    "description": "Gain $1 after every question while in hand."
   },
   {
     "itemID": 46,
     "rarity": 1,
     "name": "Golden Card",
     "type": "utility",
-    "description": "Gain $2 after every question while this is in hand."
+    "description": "Gain $2 after every question while in hand."
   },
   {
     "itemID": 47,
     "rarity": 2,
     "name": "Golden Card",
     "type": "utility",
-    "description": "Gain $3 after every question while this is in hand."
+    "description": "Gain $3 after every question while in hand."
   },
   {
     "itemID": 48,
     "rarity": 3,
     "name": "Golden Card",
     "type": "utility",
-    "description": "Gain $4 after every question while this is in hand."
+    "description": "Gain $4 after every question while in hand."
   },
   {
     "itemID": 49,
     "rarity": 4,
     "name": "Golden Card",
     "type": "utility",
-    "description": "Gain $5 after every question while this is in hand."
+    "description": "Gain $5 after every question while in hand."
   },
   {
     "itemID": 50,
     "rarity": 5,
     "name": "Golden Card",
     "type": "utility",
-    "description": "Gain $6 after every question while this is in hand."
+    "description": "Gain $6 after every question while in hand."
   },
   {
     "itemID": 51,
     "rarity": 0,
     "name": "Glass Card",
     "type": "utility",
-    "description": "Gain $2 after every correct question while this is in hand, breaking after an incorrect answer."
+    "description": "Gain $2 after every correct question while in hand, breaking after an incorrect answer."
   },
   {
     "itemID": 52,
     "rarity": 1,
     "name": "Glass Card",
     "type": "utility",
-    "description": "Gain $4 after every correct question while this is in hand, breaking after an incorrect answer."
+    "description": "Gain $4 after every correct question while in hand, breaking after an incorrect answer."
   },
   {
     "itemID": 53,
     "rarity": 2,
     "name": "Glass Card",
     "type": "utility",
-    "description": "Gain $6 after every correct question while this is in hand, breaking after an incorrect answer."
+    "description": "Gain $6 after every correct question while in hand, breaking after an incorrect answer."
   },
   {
     "itemID": 54,
     "rarity": 3,
     "name": "Glass Card",
     "type": "utility",
-    "description": "Gain $8 after every correct question while this is in hand, breaking after an incorrect answer."
+    "description": "Gain $8 after every correct question while in hand, breaking after an incorrect answer."
   },
   {
     "itemID": 55,
     "rarity": 4,
     "name": "Glass Card",
     "type": "utility",
-    "description": "Gain $10 after every correct question while this is in hand, breaking after an incorrect answer."
+    "description": "Gain $10 after every correct question while in hand, breaking after an incorrect answer."
   },
   {
     "itemID": 56,
     "rarity": 5,
     "name": "Glass Card",
     "type": "utility",
-    "description": "Gain $15 after every correct question while this is in hand, breaking after an incorrect answer."
+    "description": "Gain $15 after every correct question while in hand, breaking after an incorrect answer."
   },
   {
     "itemID": 57,
@@ -527,7 +527,7 @@
     "rarity": 4,
     "name": "Refresh",
     "type": "utility",
-    "description": "Replace all your cards with new ones of the same rarity (removing curses/statuses)."
+    "description": "Replace all your cards with new ones of higher rarity (removing curses/statuses)."
   },
   {
     "itemID": 66,

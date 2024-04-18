@@ -1,10 +1,23 @@
-import items from "./src/items.json" assert { type: "json" };
+import items from "./src/items.json" with { type: "json" };
 
 document.getCard = function (rarity = null, type = null) {
     let cards = document.getCards(rarity, type);
     if (cards.length === 0) return null;
     let random = Math.floor(Math.random() * cards.length);
     return cards[random].itemID;
+}
+
+document.getPackCard = function (rarity) {
+    let cards = document.getPackCards(rarity);
+    if (cards.length === 0) return null;
+    let random = Math.floor(Math.random() * cards.length);
+    return cards[random].itemID;
+}
+
+document.getPackCards = function (rarity) {
+    return items.filter(obj => {
+        return obj.rarity === rarity && obj.type !== "status" && obj.type !== "curse" && obj.itemID > 3;
+    });
 }
 
 document.getCards = function (rarity, type) {

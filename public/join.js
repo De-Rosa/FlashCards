@@ -1,4 +1,6 @@
-document.socket = io();
+document.socket = io({
+    transports: ['websocket']
+});
 
 document.createServer = function () {
     document.socket.emit('create-lobby', {});
@@ -11,7 +13,7 @@ document.showError = function (message) {
     document.getElementById("errorBox").textContent = message;
 
     interval = setTimeout(function() {
-        document.getElementById("errorBox").style.display = "none";
+        document.getElementById("errorBox").style.display = "one";
     }, 5000);
 }
 
@@ -20,4 +22,5 @@ document.joinLobby = function() {
     const playerName = document.getElementById('playerName').value;
 
     document.socket.emit('join-lobby', { code: lobbyCode, playerName: playerName });
+    window.scrollTo(0, 0);
 }

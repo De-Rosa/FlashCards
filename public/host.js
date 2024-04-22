@@ -405,7 +405,6 @@ function onCorrect(playerName) {
 
     if (player.onWin !== undefined) {
         amount += player.onWin;
-        console.log(player.onWin)
         player.onWin = 0;
         player.onLose = 0;
     }
@@ -751,9 +750,6 @@ function getTargetablePlayers(playerName) {
     for (let i = 0; i < Object.keys(players).length; i++) {
         let player = Object.keys(players)[i];
         if (player === playerName) continue;
-        console.log(player);
-        console.log(players[player]);
-        console.log(players[player].currentlyCloaked);
         if (players[player].currentlyCloaked) continue;
         targetable.push(player);
     }
@@ -1357,8 +1353,6 @@ function requestTarget(playerName, item) {
         return;
     }
 
-    console.log(targets);
-
     document.socket.emit('request-target', {code: lobbyCode, playerName: playerName, targets: targets})
 
     document.socket.on('target', function(data) {
@@ -1414,14 +1408,26 @@ document.getElementById('fileForm').addEventListener('submit', function(event) {
 });
 
 document.socket.on('new-user', function(data) {
+    if (Object.keys(players).includes(data.playerName)) {
+        console.log(`User ${data.playerName} rejoined server!`);
+        updatePlayer(data.playerName);
+        return;
+    }
+
     addPlayer(data.playerName);
     console.log("New user joined server with name " + data.playerName);
 })
 
 document.socket.on('lobby-created', function(data) {
-    openHostScreen(data.code);
-    lobbyCode = data.code;
-    console.log("New lobby created with code " + data.code);
+    if (data.success) {
+        openHostScreen(data.code);
+        lobbyCode = data.code;
+        console.log("New lobby created with code " + data.code);
+    } else {
+        document.showError(data.message);
+        console.log("Couldn't create lobby: " + data.message);
+
+    }
 })
 
 document.socket.on('buy', function(data) {

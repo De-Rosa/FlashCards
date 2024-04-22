@@ -20,6 +20,7 @@ index.listen(process.env.PORT || 8080, () => {
 
 function generateLobbyCode() {
     let code;
+    if (lobbies.length >= 99999) return null;
 
     while (true) {
         code = Math.floor(10000 + Math.random() * 90000).toString();
@@ -43,6 +44,19 @@ function getPlayer(lobby, playerName) {
             return lobby.players[i];
         }
     }
+    return null;
+}
+
+function getPlayerFromID(id) {
+    let lobbyCodes = Object.keys(lobbies);
+    for (let i = 0; i < lobbyCodes.length; i++) {
+        let players = lobbies[lobbyCodes[i]].players;
+        for (let j = 0; j < players.length; j++) {
+            let player = players[j];
+            if (player.id === id) return player;
+        }
+    }
+    return null;
 }
 
 function getPlayerNames(lobby) {
@@ -59,6 +73,10 @@ function joinLobby(lobby, playerName) {
 
 io.on('connection', (socket) => {
     socket.on('create-lobby', () => {
+        if (lobbies.length >= 100) {
+            socket.emit('lobby-created', {success: false, message: "Too many servers!"});
+            return;
+        }
         const lobbyCode = generateLobbyCode();
         lobbies[lobbyCode] = {
             host: socket.id,
@@ -67,15 +85,29 @@ io.on('connection', (socket) => {
 
         lobbyHosts[socket.id] = lobbyCode;
 
-        console.log("New lobby with host " + socket.id);
-        socket.emit('lobby-created', {code: lobbyCode});
+        console.log(`New lobby ${lobbyCode} with host ` + socket.id);
+        socket.emit('lobby-created', {success: true, code: lobbyCode});
     })
 
     socket.on('join-lobby', (data) => {
         const { code, playerName } = data;
+        console.log(lobbies);
+        console.log(code);
+        console.log(lobbies[code]);
+        console.log(lobbies[code.toString()]);
+
         if (lobbies[code]) {
             if (checkIfNameExists(lobbies[code], playerName)) {
-                socket.emit('lobby-joined', { success: false, message: 'Name already exists'});
+                let player = getPlayer(lobbies[code], playerName);
+                if (player.connected === false) {
+                    // player in lobby but disconnected
+                    player.connected = true;
+                    player.id = socket.id;
+                    socket.emit('lobby-joined', { success: true, code: code, playerName: playerName });
+                    joinLobby(lobbies[code], playerName);
+                } else {
+                    socket.emit('lobby-joined', { success: false, message: 'Name already exists'});
+                }
             } else if (playerName.length > 20 || playerName.length === 0) {
                 socket.emit('lobby-joined', { success: false, message: 'Invalid name!'});
             }
@@ -83,7 +115,8 @@ io.on('connection', (socket) => {
                 lobbies[code].players.push(
                     {
                         name: playerName,
-                        id: socket.id
+                        id: socket.id,
+                        connected: true
                     }
                 );
                 socket.emit('lobby-joined', { success: true, code: code, playerName: playerName });
@@ -106,6 +139,12 @@ io.on('connection', (socket) => {
 
             delete lobbies[code];
             console.log("Shut down lobby " + code + "!");
+        } else {
+            // lobbies randomly just disappear?
+            // let player = getPlayerFromID(socket.id)
+            // if (player !== null) {
+            //     player.connected = false;
+            // }
         }
     })
 

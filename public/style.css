@@ -423,8 +423,8 @@ td {
     width: 10%;
     height: auto;
     position: absolute;
-    transform: translate(50%, 90%);
-    z-index: 5;
+    transform: translate(25%, 25%);
+    z-index: 10;
 }
 
 #icon-grid {
@@ -452,8 +452,8 @@ td {
 #plugin-shop-grid {
     display: grid;
     position: absolute;
-    gap: 25px;
-    grid-template-columns: repeat(4, 105px);
+    gap: 20px;
+    grid-template-columns: repeat(4, 110px);
     bottom: 150px;
     left: 25px;
 }
@@ -464,6 +464,8 @@ td {
     cursor: pointer;
     border: 2px solid black;
     padding-top: 10px;
+    font-family: 'FSEX', serif;
+    overflow: hidden;
 }
 
 .plugin-shop-grid-item img {
@@ -680,7 +682,7 @@ button:hover {
     border: 4px double black;
     transition: transform 0.3s cubic-bezier(0.65, 0.05, 0.36, 1);
     font-family: FSEX, serif;
-    font-size: 30px;
+    font-size: 25px;
     font-style: italic;
     cursor: pointer;
     margin: 10px;

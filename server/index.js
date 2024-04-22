@@ -91,10 +91,6 @@ io.on('connection', (socket) => {
 
     socket.on('join-lobby', (data) => {
         const { code, playerName } = data;
-        console.log(lobbies);
-        console.log(code);
-        console.log(lobbies[code]);
-        console.log(lobbies[code.toString()]);
 
         if (lobbies[code]) {
             if (checkIfNameExists(lobbies[code], playerName)) {
@@ -140,11 +136,10 @@ io.on('connection', (socket) => {
             delete lobbies[code];
             console.log("Shut down lobby " + code + "!");
         } else {
-            // lobbies randomly just disappear?
-            // let player = getPlayerFromID(socket.id)
-            // if (player !== null) {
-            //     player.connected = false;
-            // }
+            let player = getPlayerFromID(socket.id)
+            if (player !== null) {
+                player.connected = false;
+            }
         }
     })
 

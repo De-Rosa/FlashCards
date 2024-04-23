@@ -1,4 +1,5 @@
-import items from "./src/items.json" assert { type: "json" };
+import data from './src/items.js'
+const items = data.data;
 
 document.getCard = function (rarity = null, type = null) {
     let cards = document.getCards(rarity, type);

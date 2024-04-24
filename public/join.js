@@ -2,6 +2,15 @@ document.socket = io({
     transports: ['websocket']
 });
 
+document.socket.on("connect", () => {
+    console.log("Connected to the server with id " + document.socket.id);
+
+});
+
+document.socket.on("disconnect", () => {
+    console.log("Disconnected from the server with id " + document.socket.id);
+});
+
 document.createServer = function () {
     document.socket.emit('create-lobby', {});
 }

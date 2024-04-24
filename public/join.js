@@ -1,6 +1,4 @@
-document.socket = io({
-    transports: ['websocket']
-});
+document.socket = io();
 
 document.socket.on("connect", () => {
     console.log("Connected to the server with id " + document.socket.id);

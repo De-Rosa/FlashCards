@@ -28,11 +28,13 @@ function dragElement(element) {
         pos3 = e.clientX;
         pos4 = e.clientY;
 
-        let newLeft = (element.offsetLeft - pos1) / window.innerWidth * 100;
-        element.style.left = newLeft + "%";
+        let newLeft = (element.offsetLeft - pos1) * (window.innerWidth / document.documentElement.clientWidth);
+        newLeft = Math.max(element.offsetWidth / 2, Math.min(newLeft, window.innerWidth - element.offsetWidth / 2));
+        element.style.left = ((newLeft / window.innerWidth) * 100) + "%";
 
-        let newTop = (element.offsetTop - pos2) / window.innerHeight * 100;
-        element.style.top = newTop + "%";
+        let newTop = (element.offsetTop - pos2) * (window.innerHeight / document.documentElement.clientHeight);
+        newTop = Math.max(element.offsetHeight / 2, Math.min(newTop, window.innerHeight - element.offsetHeight / 2));
+        element.style.top = ((newTop / window.innerHeight) * 100) + "%";
     }
 
     function closeDragElement() {

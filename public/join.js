@@ -8,6 +8,7 @@ document.socket.on("connect", () => {
 });
 
 document.socket.on("disconnect", () => {
+    location.reload();
     console.log("Disconnected from the server with id " + document.socket.id);
 });
 
@@ -22,7 +23,7 @@ document.showError = function (message) {
     document.getElementById("errorBox").textContent = message;
 
     interval = setTimeout(function() {
-        document.getElementById("errorBox").style.display = "one";
+        document.getElementById("errorBox").style.display = "none";
     }, 5000);
 }
 

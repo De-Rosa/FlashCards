@@ -725,7 +725,11 @@ function processUse(playerName, item) {
     let type = document.getItemDetails(item).type;
     switch (type) {
         case "attack": {
-            requestTarget(playerName, item);
+            let result = requestTarget(playerName, item);
+            if (!result) {
+                updatePlayer(playerName);
+                return false;
+            }
             break;
         }
         case "utility": {
@@ -1350,7 +1354,7 @@ function requestTarget(playerName, item) {
     let targets = getTargetablePlayers(playerName);
     if (targets.length === 0) {
         players[playerName].items.push(item);
-        return;
+        return false;
     }
 
     document.socket.emit('request-target', {code: lobbyCode, playerName: playerName, targets: targets})
@@ -1363,6 +1367,7 @@ function requestTarget(playerName, item) {
         }
     })
 
+    return true;
 }
 
 function updateToggleColor(playerName) {
@@ -1411,11 +1416,19 @@ document.socket.on('new-user', function(data) {
     if (Object.keys(players).includes(data.playerName)) {
         console.log(`User ${data.playerName} rejoined server!`);
         updatePlayer(data.playerName);
+
+        if (question !== null) {
+            playerEvent(data.playerName, data.playerName, "joinDuringQuestion");
+        }
         return;
     }
 
     addPlayer(data.playerName);
     console.log("New user joined server with name " + data.playerName);
+
+    if (question !== null) {
+        playerEvent(data.playerName, data.playerName, "joinDuringQuestion");
+    }
 })
 
 document.socket.on('lobby-created', function(data) {

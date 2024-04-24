@@ -73,6 +73,7 @@ function updateBackground() {
     }
 }
 
+let previousItems = [];
 function displayAllItems(items) {
     resetCards();
     resetPlugins();
@@ -81,13 +82,15 @@ function displayAllItems(items) {
             // is a plugin
             displayPlugin(items[i]);
         } else {
-            // is a card
-            displayCard(items[i]);
+            // is a card - if new, animate
+            displayCard(items[i], !previousItems.includes(items[i]));
         }
     }
+
+    previousItems = items;
 }
 
-function displayCard(item) {
+function displayCard(item, isNew = false) {
     const rarities = ["common", "rare", "epic", "legendary", "mythic", "godly"]
 
     let cardDetails = document.getItemDetails(item);
@@ -120,6 +123,17 @@ function displayCard(item) {
     newDiv.appendChild(rarity);
     newDiv.appendChild(title);
     newDiv.appendChild(description);
+
+    if (isNew) {
+        newDiv.animate([
+            {transform: "translateY(-100px)", opacity: "0%", width: "0"},
+            {transform: "translateY(0px)", opacity: "100%", width: "250px"},
+        ], {
+            duration: 200,
+            iterations: 1,
+            easing: "cubic-bezier(0.65, 0.05, 0.36, 1)"
+        })
+    }
 
     document.getElementById("cards").appendChild(newDiv);
 }
@@ -275,6 +289,17 @@ document.selectShopItem = function (div, item) {
     pointer.src = "images/pointer.png"
     selectedShop.prepend(pointer);
 
+    pointer.animate([
+        {transform: "rotate(10deg)", opacity: "0%"},
+        {transform: "rotate(0deg)", opacity: "100%"},
+    ], {
+        duration: 200,
+        iterations: 1,
+        fill: "forwards",
+        easing: "cubic-bezier(0.65, 0.05, 0.36, 1)"
+    })
+
+
     updateClippert(item);
     setPurchase(item);
 
@@ -362,8 +387,20 @@ function resetPurchase() {
 }
 
 function useCard(div, item) {
-    div.remove();
-    use(item);
+    div.animate([
+        {transform: "translateY(-20px)", opacity: "100%", width: "250px"},
+        {transform: "translateY(-100px)", opacity: "0%", width: "0"},
+    ], {
+        duration: 200,
+        iterations: 1,
+        fill: "forwards",
+        easing: "cubic-bezier(0.65, 0.05, 0.36, 1)"
+    })
+
+    setTimeout(function () {
+        div.remove();
+        use(item);
+    }, 200)
 }
 
 let cooldown = null;
@@ -401,6 +438,9 @@ function processEvent(playerName, event) {
             break;
         case "attacked":
             document.showError(`You have been attacked by ${playerName}!`)
+            break;
+        case "joinDuringQuestion":
+            openBulbScreen();
             break;
         default:
             console.error("Processing unknown event!");
@@ -481,7 +521,6 @@ document.socket.on('use-response', function(data) {
 })
 
 document.socket.on('event', function(data) {
-    console.log(`Effect ${data.event} from player ${data.playerName}`)
     processEvent(data.playerName, data.event)
 })
 

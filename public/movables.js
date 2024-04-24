@@ -28,7 +28,16 @@ function dragElement(element) {
         pos3 = e.clientX;
         pos4 = e.clientY;
 
-        if (element.classList.contains("unbound")) return;
+        // no boundary box
+        if (element.classList.contains("unbound")) {
+            let newLeft = (element.offsetLeft - pos1) / window.innerWidth * 100;
+            element.style.left = newLeft + "%";
+
+            let newTop = (element.offsetTop - pos2) / window.innerHeight * 100;
+            element.style.top = newTop + "%";
+
+            return
+        }
 
         let newLeft = (element.offsetLeft - pos1) * (window.innerWidth / document.documentElement.clientWidth);
         newLeft = Math.max(element.offsetWidth / 2, Math.min(newLeft, window.innerWidth - element.offsetWidth / 2));

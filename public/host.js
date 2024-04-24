@@ -322,6 +322,8 @@ document.selectFile = function (fileName) {
 
     document.getElementById("question-box").style.height = "";
     document.getElementById("question-box").style.scale = "";
+    document.getElementById("question-box").style.left = "";
+    document.getElementById("question-box").style.top = "";
 
     document.renderPDF(qp);
     showMS(ms);
